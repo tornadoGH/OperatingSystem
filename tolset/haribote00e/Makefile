@@ -7,14 +7,14 @@ COPY		= copy
 DEL			= del
 
 
-default:
+default :
 	$(MAKE) img
 
 # ファイル生成規則
-ipl.bin : lpl.nas Makefile
+ipl.bin : ipl.nas Makefile
 	$(NASK) ipl.nas ipl.bin. ipl.lst
 
-haribote.sys : baribote.nas Makefile
+haribote.sys : haribote.nas Makefile
 	$(NASK) haribote.nas haribote.sys haribote.lst
 
 haribote.img : ipl.bin haribote.sys Makefile
@@ -25,10 +25,25 @@ haribote.img : ipl.bin haribote.sys Makefile
 
 
 # コマンド
-img:
+img :
 	$(MAKE) haribote.img
 
-run:
+run :
 	$(MAKE) img
 	$(COPY) haribote.img ..\z_tools\qemu\fdimage0.bin
 	$(MAKE) -C ../z_tools/qemu
+
+install :
+	$(MAKE) img
+	$(IMGTOL) w a:haribote.img
+
+clean :
+	-$(DEL) ipl.bin
+	-$(DEL) ipl.lst
+	-$(DEL) haribote.sys
+	-$(DEL) haribote.lst
+
+src_only :
+	$(MAKE) clean
+	-$(DEL) haribote.img
+
